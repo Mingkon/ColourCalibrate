@@ -1,0 +1,6 @@
+/home/mingkon/Desktop/colourCalibrate/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mingkon/Desktop/colourCalibrate/cpp/cmake-build-debug/CMakeFiles/main.dir
+/home/mingkon/Desktop/colourCalibrate/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/mingkon/Desktop/colourCalibrate/cpp/cmake-build-debug/cuda/CMakeFiles/rebuild_cache.dir
+/home/mingkon/Desktop/colourCalibrate/cpp/cmake-build-debug/cuda/CMakeFiles/gpu.dir
+/home/mingkon/Desktop/colourCalibrate/cpp/cmake-build-debug/cuda/CMakeFiles/edit_cache.dir
