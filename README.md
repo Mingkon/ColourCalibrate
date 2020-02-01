@@ -76,9 +76,7 @@ $$
 
 we get  colour calibrate matrix.
 
-
-- (for each pixel):
-
+for each pixel,
 $$
 calibratedImg = Coefficient^{T} * rawImg
 $$
