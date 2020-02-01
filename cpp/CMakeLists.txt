@@ -7,6 +7,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 # CUDA
 add_subdirectory(cuda)
 set (EXTRA_LIBS ${EXTRA_LIBS} gpu)
+find_package(CUDA REQUIRED)
+include_directories(${CUDA_INCLUDE_DIRS})
 
 # OpenCV
 #set(OpenCV_DIR /usr/local/share/OpenCV)
@@ -22,4 +24,4 @@ FILE(GLOB SRC "*.cpp")
 set(CMAKE_BUILD_TYPE Release)
 
 add_executable(main ${SRC})
-target_link_libraries (main ${OpenCV_LIBS} ${EXTRA_LIBS})
+target_link_libraries (main ${OpenCV_LIBS} ${CUDA_LIBS} ${EXTRA_LIBS})

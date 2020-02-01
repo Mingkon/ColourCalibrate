@@ -16,9 +16,9 @@ int main()
 {
     //// generate color bar
     ColorBar color_bar;
-    std::string save_path = "/home/mingkon/Desktop/colourCalibrate/img/";
+    std::string save_path = "/home/mingkon/Desktop/ColourCalibrate/img/";
     color_bar.generateColorBar(save_path);
-    std::string img_path = "/home/mingkon/Desktop/colourCalibrate/img/sony1.jpg";
+    std::string img_path = "/home/mingkon/Desktop/ColourCalibrate/img/iphone1.jpg";
     cv::Mat img = cv::imread(img_path.c_str(),cv::IMREAD_COLOR);
     std::cout <<"img size:"<< img.size()<<std::endl;
 //    cv::imshow("Image",img);

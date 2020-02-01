@@ -31,7 +31,7 @@ __global__ void kernelSetWB(
         float blueAver, float greenAver, float redAver,
         int _image_height, int _image_width)
 {
-    printf("kernelSetWB in GPU !\n");
+    //printf("kernelSetWB in GPU !\n");
 
     const unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int idy = blockIdx.y * blockDim.y + threadIdx.y;
@@ -94,23 +94,24 @@ void getAver()
 }
 
 
-void setWB(const cv::Mat & img, cv::Mat & processedImg,
-           float blueAver, float greenAver, float redAver, int _image_height, int _image_width)
+void setWB(uchar * img, uchar * processedImg,
+           float blueAver, float greenAver, float redAver, int image_height, int image_width)
 {
 
     uchar3 * bgr_d, * wb_bgr_d;
 
-    cudaMalloc((void**)&bgr_d, _image_height*_image_width*sizeof(uchar3));
-    cudaMalloc((void**)&wb_bgr_d, _image_height*_image_width*sizeof(uchar3));
+    cudaMalloc((void**)&bgr_d, image_height*image_width*sizeof(uchar3));
+    cudaMalloc((void**)&wb_bgr_d, image_height*image_width*sizeof(uchar3));
 
-    cudaMemcpy(bgr_d, img.data, _image_height*_image_width*sizeof(uchar3), cudaMemcpyHostToDevice);
+    cudaMemcpy(bgr_d, img, image_height*image_width*sizeof(uchar3), cudaMemcpyHostToDevice);
 
 
     dim3 dimBlock(32, 32);
-    dim3 dimGrid((_image_width + dimBlock.x - 1) / dimBlock.x,
-                       (_image_height + dimBlock.y - 1) / dimBlock.y);
+    dim3 dimGrid((image_width + dimBlock.x - 1) / dimBlock.x,
+                 (image_height + dimBlock.y - 1) / dimBlock.y);
 
-    kernelSetWB<<<dimGrid,dimBlock>>>(bgr_d, wb_bgr_d, blueAver, greenAver, redAver,_image_height, _image_width);
+    kernelSetWB<<<dimGrid,dimBlock>>>(bgr_d, wb_bgr_d, blueAver, greenAver, redAver,image_height, image_width);
     CHECK(cudaDeviceSynchronize());
+    cudaMemcpy(processedImg, wb_bgr_d, image_height*image_width*sizeof(uchar3), cudaMemcpyDeviceToHost);
 
 }

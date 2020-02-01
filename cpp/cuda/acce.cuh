@@ -26,8 +26,8 @@ extern "C"
 void getAver();
 
 extern "C"
-void setWB(cv::Mat & img, cv::Mat & processedImg,
-           float blueAver, float greenAver, float redAver, int _image_height, int _image_width);
+void setWB(uchar * img, uchar * processedImg,
+           float blueAver, float greenAver, float redAver, int image_height, int image_width);
 
 
 #endif //COLOR_CALIBRATE_CPP_ACCE_H

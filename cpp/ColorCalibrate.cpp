@@ -29,7 +29,7 @@ extern "C"
 void getAver();
 
 extern "C"
-void setWB(cv::Mat & img, cv::Mat & processedImg,
+void setWB(uchar * img, uchar * processedImg,
            float blueAver, float greenAver, float redAver, int _image_height, int _image_width);
 
 ColorCalibrate::ColorCalibrate(const cv::Mat & Image)
@@ -78,13 +78,17 @@ ColorCalibrate::ColorCalibrate(const cv::Mat & Image)
 
     cv::Mat StandardColor = cv::Mat(cv::Size(4,6), CV_8UC3);
 
+
+    float BETHA_B = 0.8; // to make the stdcolor channels more moderate
+    float BETHA_G = 0.8;
+    float BETHA_R = 0.8;
     for (int i = 0; i < 6; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            StandardColor.at<cv::Vec3b>(i,j).val[0] =  arrStandardColor[i][j][0];
-            StandardColor.at<cv::Vec3b>(i,j).val[1] =  arrStandardColor[i][j][1];
-            StandardColor.at<cv::Vec3b>(i,j).val[2] =  arrStandardColor[i][j][2];
+            StandardColor.at<cv::Vec3b>(i,j).val[0] =  uchar(float(arrStandardColor[i][j][0]) * BETHA_B);
+            StandardColor.at<cv::Vec3b>(i,j).val[1] =  uchar(float(arrStandardColor[i][j][1]) * BETHA_G);
+            StandardColor.at<cv::Vec3b>(i,j).val[2] =  uchar(float(arrStandardColor[i][j][2]) * BETHA_R);
         }
     }
     _stdRGBColorBlocks = StandardColor;
@@ -449,18 +453,17 @@ void  ColorCalibrate::applyWhiteBalancePR(cv::Mat img, cv::Mat & processedImg, f
     //// check if there is any GPU available
 
     int nDevices;
-    struct cudaDeviceProp * 	prop;
-    cudaError_t res = cudaGetDeviceProperties	(prop, nDevices);
+    cudaGetDeviceCount(& nDevices);
     std::cout<<"GPU numbers:"<<nDevices<<std::endl;
 
-    if (0 != nDevices)
+
+    if (0 != nDevices && nDevices < 10)
     {
         std::cout<<"Using GPU"<<std::endl;
 
-        setWB(
-                (cv::Mat&) img, (cv::Mat&) processedImg,
-                (float) blueAver, (float) greenAver, (float) redAver,
-                (int)  _image_height, (int)  _image_width);
+        setWB(img.data, processedImg.data,
+              blueAver, greenAver, redAver,
+              _image_height, _image_width);
     }
     else {
         std::cout << "Using CPU" << std::endl;
@@ -523,7 +526,7 @@ void ColorCalibrate::calibrate(cv::Mat& correctedImg,const cv::Mat & ccm,
     // 以后需要加white rate参数
     cv::Mat wbCorrectedLinearBGR;
     time_t start_wb = time(NULL);
-    applyWhiteBalancePR(correctedLinearBGR, wbCorrectedLinearBGR, 0.2);
+    applyWhiteBalancePR(correctedLinearBGR, wbCorrectedLinearBGR, 0.8);
     time_t end_wb = time(NULL);
     std::cout <<"applyWhiteBalancePR time spent: "<<end_wb - start_wb<< std::endl;
     // 确定degamma和gamma的意义
@@ -554,6 +557,6 @@ void ColorCalibrate::executeCalibrate(cv::Mat& calibratedImg,std::string& output
 
     calibrate(calibratedImg, ccm);
 
-    cv::imwrite(output_path + "calibratedImg_sony1.jpg", calibratedImg);
+    cv::imwrite(output_path + "calibratedImg_iphone1.jpg", calibratedImg);
 
 }
