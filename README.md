@@ -4,15 +4,15 @@ This repository shows how to calibrate colour with standard colour checker.
 
 
 
-It is implemented with python3 and cpp
+It is implemented with python3 and cpp.
 
-In cpp it is accelerated with CUDA
+In cpp it is accelerated with CUDA.
 
 
 
 #### 0.  requirements
 
-   for py  both opencv and  lib-opencv are needed
+   for py  both opencv and  lib-opencv are needed.
    for cpp both opencv and opencv-contrib are need, and make sure their versions are match.
 
 #### 1. algorithm
@@ -167,6 +167,6 @@ calibratedImg = C^{T} * rawImg
 $$
 
 
-#### 2 discuss
+#### 2. discuss
 
 In the example, the dark part of calibrated image is dotted with noise, and  more details need to be done. 
