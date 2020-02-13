@@ -114,4 +114,7 @@ void setWB(uchar * img, uchar * processedImg,
     CHECK(cudaDeviceSynchronize());
     cudaMemcpy(processedImg, wb_bgr_d, image_height*image_width*sizeof(uchar3), cudaMemcpyDeviceToHost);
 
+    cudaFree(bgr_d);
+    cudaFree(wb_bgr_d);
+
 }
